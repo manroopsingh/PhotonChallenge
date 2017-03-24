@@ -5,12 +5,12 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,26 +28,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
-
-
     }
 
-
-    public void createMatrix(View view) {
-
+    @OnClick(R.id.btnCreateMatrix)
+    public void createMatrix() {
         matrixHeight = etHeight.getText().toString();
         matrixWidth = etWidth.getText().toString();
         if (!validateDimentions()) return;
-
         Intent intent = new Intent(this, GridActivity.class);
         intent.putExtra("Height", matrixHeight);
         intent.putExtra("Width", matrixWidth);
         startActivity(intent);
 
-
     }
-
 
     public boolean validateDimentions() {
 

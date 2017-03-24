@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,6 +22,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class GridActivity extends AppCompatActivity {
 
@@ -35,12 +36,12 @@ public class GridActivity extends AppCompatActivity {
     Button btnCalculatePath;
 
     @BindView((R.id.result))
-    TextView result;
+    TextView tvResult;
 
 
-    int matrixHeight, matrixWidth;
-    String value ="";
-    List<List<EditText>> editTextGrid;
+    private int matrixHeight, matrixWidth;
+    private String value = "";
+    private List<List<EditText>> editTextGrid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +49,6 @@ public class GridActivity extends AppCompatActivity {
         setContentView(R.layout.activity_grid);
         ButterKnife.bind(this);
         Intent intent = getIntent();
-
         matrixHeight = Integer.parseInt(intent.getStringExtra("Height"));
         matrixWidth = Integer.parseInt(intent.getStringExtra("Width"));
 
@@ -56,31 +56,27 @@ public class GridActivity extends AppCompatActivity {
         textViewWidth.setText((intent.getStringExtra("Width")));
 
         createMatrix(matrixHeight, matrixWidth);
-        btnCalculatePath.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (validateDimentions()) {
-                    printOut(Findpath());
-                }
-            }
-        });
     }
 
+    @OnClick(R.id.btnCalculatePath)
+    public void calculatePath(){
+        if (!validateDimentions()) return;
+        updateResult(Findpath());
 
-    private void printOut(ShortestPath shortestPath) {
-        String s;
+    }
 
-        s = shortestPath.terminates() ? "Yes\n" : "No\n";
-        s += shortestPath.getCost() + "\n";
-        s += "[";
+    private void updateResult(ShortestPath shortestPath) {
+        String result;
+        result = shortestPath.terminates() ? "Yes\n" : "No\n";
+        result += shortestPath.getCost() + "\n";
+        result += "[";
 
         for (Step step : shortestPath) {
-            s += step.getRow() + " ";
+            result += step.getRow() + " ";
         }
-        s += "]";
+        result += "]";
 
-        result.setText(s);
+        tvResult.setText(result);
     }
 
     private void createMatrix(int matrixHeight, int matrixWidth) {
@@ -95,6 +91,7 @@ public class GridActivity extends AppCompatActivity {
             for (int heightIndex = 0; heightIndex < matrixHeight; heightIndex++) {
 
                 EditText editText = new EditText(this);
+                editText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                 editText.setTextSize(25);
                 editText.setWidth(175);
                 editText.setHeight(175);
@@ -112,9 +109,6 @@ public class GridActivity extends AppCompatActivity {
 
     public ShortestPath Findpath() {
 
-
-        Toast.makeText(this, "Finding shortest path..", Toast.LENGTH_SHORT).show();
-
         PathMatrix pathmatrix = new PathMatrix();
 
         for (int widthIndex = 0; widthIndex < matrixWidth; widthIndex++) {
@@ -131,23 +125,16 @@ public class GridActivity extends AppCompatActivity {
 
     public boolean validateDimentions() {
 
-
         for (int widthIndex = 0; widthIndex < matrixWidth; widthIndex++) {
-
             for (int heightIndex = 0; heightIndex < matrixHeight; heightIndex++) {
-
                 value = editTextGrid.get(widthIndex).get(heightIndex).getText().toString();
-                Log.e("GRIDACTIVITY", "validateDimentions: " + widthIndex + ":" + heightIndex + "|" + editTextGrid.get(widthIndex).get(heightIndex).getText().toString());
 
-//                if(editTextGrid.get(widthIndex).get(heightIndex).getText().toString()=="");
-//                {
-//                    Toast.makeText(this, "Please enter all values", Toast.LENGTH_SHORT).show();
-//                    return false;
-//                }
+                if (TextUtils.isEmpty(value)) {
+                    Toast.makeText(this, "Please enter all values", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
             }
         }
-
-
         return true;
     }
 
