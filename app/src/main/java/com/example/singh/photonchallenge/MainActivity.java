@@ -53,9 +53,8 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Enter height within 1 and 10", Toast.LENGTH_SHORT).show();
             return false;
         }
-
-        if (Integer.parseInt(matrixWidth) > 10 || Integer.parseInt(matrixWidth) < 5) {
-            Toast.makeText(this, "Enter width within 5 and 10", Toast.LENGTH_SHORT).show();
+        if (Integer.parseInt(matrixWidth) > 100 || Integer.parseInt(matrixWidth) < 5) {
+            Toast.makeText(this, "Enter width within 5 and 100", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;

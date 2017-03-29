@@ -8,7 +8,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -36,20 +35,8 @@ public class MainActivityTest {
 
         inputValues();
 
-
-        // Check that the text was changed.
         onView(withId(R.id.editTextHeight)).check(matches(withText(String.valueOf(4))));
         onView(withId(R.id.editTextWidth)).check(matches(withText(String.valueOf(4))));
-
-    }
-
-    @Test
-    public void checkIntent(){
-        inputValues();
-        onView(withId(R.id.btnCreateMatrix)).perform(click());
-
-//        intended(allOf(
-//                hasData(4)));
 
     }
 
@@ -61,5 +48,8 @@ public class MainActivityTest {
                 .perform(typeText(String.valueOf(4)), closeSoftKeyboard());
 
     }
+
+
+
 
 }

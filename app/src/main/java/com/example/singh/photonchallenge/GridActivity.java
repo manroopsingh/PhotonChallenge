@@ -12,10 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.singh.photonchallenge.model.PathMatrix;
-import com.example.singh.photonchallenge.model.Step;
-import com.example.singh.photonchallenge.solution.PathFinder;
-import com.example.singh.photonchallenge.solution.ShortestPath;
+import com.example.singh.photonchallenge.solution.CalculatePaths;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +39,7 @@ public class GridActivity extends AppCompatActivity {
     private int matrixHeight, matrixWidth;
     private String value = "";
     private List<List<EditText>> editTextGrid;
+    int[][] matrix;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,25 +57,14 @@ public class GridActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.btnCalculatePath)
-    public void calculatePath(){
+    public void calculatePath() {
+        convertMatrix();
         if (!validateDimentions()) return;
-        updateResult(Findpath());
+        CalculatePaths calculatePaths = new CalculatePaths(matrix);
+        tvResult.setText(calculatePaths.findShortestPath());
 
     }
 
-    private void updateResult(ShortestPath shortestPath) {
-        String result;
-        result = shortestPath.terminates() ? "Yes\n" : "No\n";
-        result += shortestPath.getCost() + "\n";
-        result += "[";
-
-        for (Step step : shortestPath) {
-            result += step.getRow() + " ";
-        }
-        result += "]";
-
-        tvResult.setText(result);
-    }
 
     private void createMatrix(int matrixHeight, int matrixWidth) {
 
@@ -107,21 +94,19 @@ public class GridActivity extends AppCompatActivity {
 
     }
 
-    public ShortestPath Findpath() {
 
-        PathMatrix pathmatrix = new PathMatrix();
+    public void convertMatrix() {
+        matrix = new int[matrixHeight][matrixWidth];
 
         for (int widthIndex = 0; widthIndex < matrixWidth; widthIndex++) {
-            List<Integer> column = new ArrayList<Integer>();
-
             for (int heightIndex = 0; heightIndex < matrixHeight; heightIndex++) {
-                column.add(Integer.parseInt(editTextGrid.get(widthIndex).get(heightIndex).getText().toString()));
+                matrix[heightIndex][widthIndex] = Integer.parseInt(editTextGrid.get(widthIndex).get(heightIndex).getText().toString());
             }
-
-            pathmatrix.addColumn(column);
         }
-        return new PathFinder(pathmatrix).navigate();
+
+
     }
+
 
     public boolean validateDimentions() {
 

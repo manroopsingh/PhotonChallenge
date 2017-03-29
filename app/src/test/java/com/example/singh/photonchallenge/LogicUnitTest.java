@@ -1,14 +1,9 @@
 package com.example.singh.photonchallenge;
 
-import com.example.singh.photonchallenge.model.PathMatrix;
-import com.example.singh.photonchallenge.model.Step;
-import com.example.singh.photonchallenge.solution.PathFinder;
-import com.example.singh.photonchallenge.solution.ShortestPath;
+
+import com.example.singh.photonchallenge.solution.CalculatePaths;
 
 import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 
@@ -18,193 +13,87 @@ import static org.junit.Assert.assertTrue;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 public class LogicUnitTest {
-    @Test
-    public void testTrivial() {
-        PathMatrix pathMatrix = new PathMatrix();
 
-        List<Integer> firstColumn = new ArrayList<Integer>();
-        firstColumn.add(1);
-        pathMatrix.addColumn(firstColumn);
-        PathFinder pathFinder = new PathFinder(pathMatrix);
-        ShortestPath derivedPath = pathFinder.navigate();
-        Step testStep = new Step();
-        testStep.setCost(1);
-        testStep.setRow(1);
-        ShortestPath testPath = new ShortestPath(pathMatrix);
-        testPath.add(testStep);
-        assertTrue(pathFinder.terminates(derivedPath));
-        assertTrue(derivedPath.equals(testPath));
-        assertTrue(derivedPath.getCost() == 1);
+
+    //2 sample matrices for testing
+    int[][] sampleMatrix1 = new int[][]{
+            {4, 5, 8, 6},
+            {4, 6, 6, 2},
+            {7, 3, 8, 2},
+            {3, 6, 2, 7}
+
+    };
+    int[][] sampleMatrix2 = new int[][]{
+            {1, 8, 3, 6, 1},
+            {4, 5, 1, 1, 5},
+            {4, 5, 1, 5, 5},
+            {7, 1, 9, 1, 2},
+            {1, 1, 1, 1, 4}
+    };
+
+    //testing minimum value in a column for a given sample matrix with range rowIndex-1 to rowIndex-1
+    @Test
+    public void testMinValueFnx() {
+        CalculatePaths calculatePaths = new CalculatePaths(sampleMatrix1);
+        int[] sampleColumn = calculatePaths.getColumnAt(2);
+        int[] returnedValue = calculatePaths.getMinValue(sampleColumn, 2);
+        assertTrue(returnedValue[0] == 2);
+        assertTrue(returnedValue[1] == 3);
+
     }
 
+    //testing returned column from a given sample matrix at a given columnIndex
     @Test
-    public void testRow() {
-        PathMatrix pathMatrix = new PathMatrix();
+    public void testGetColumnAtFxn() {
 
-        for (int i = 0; i < 5; i++) {
-            List<Integer> column = new ArrayList<Integer>();
-            column.add(1);
-            pathMatrix.addColumn(column);
-        }
-
-        PathFinder tester = new PathFinder(pathMatrix);
-        ShortestPath derivedPath = tester.navigate();
-
-        ShortestPath testPath = new ShortestPath(pathMatrix);
-        for (int i = 0; i < 5; i++) {
-            Step step = new Step();
-            step.setRow(1);
-            step.setCost(1);
-            testPath.add(step);
-        }
-
-
-        assertTrue(derivedPath.getCost() == testPath.getCost());
-
-        for (int i = 0; i < 5; i++) {
-            assertTrue(derivedPath.get(i).getRow() == testPath.get(i).getRow());
+        CalculatePaths calculatePaths = new CalculatePaths(sampleMatrix1);
+        int[] returnedColumn = calculatePaths.getColumnAt(1);
+        for (int i = 0; i < sampleMatrix1[0].length; i++) {
+            assertTrue(returnedColumn[i] == sampleMatrix1[i][1]);
         }
 
     }
 
+    //testing minimumn value in a array
     @Test
-    public void testColumn() {
-        PathMatrix pathMatrix = new PathMatrix();
+    public void testGetShortestPathFxn() {
+        CalculatePaths calculatePaths = new CalculatePaths(sampleMatrix2);
+        int[] pathDistances = calculatePaths.getColumnAt(4);
+        int[] returnedValue = calculatePaths.getShortestPath(pathDistances);
 
-        List<Integer> listStep = new ArrayList<Integer>();
-
-        listStep.add(5);
-        listStep.add(8);
-        listStep.add(5);
-        listStep.add(3);
-        listStep.add(5);
-
-        pathMatrix.addColumn(listStep);
-
-        PathFinder tester = new PathFinder(pathMatrix);
-
-        ShortestPath derivedPath = tester.navigate();
-
-        assertTrue(derivedPath.getCost() == 3);
-    }
-
-    @Test
-    public void testOverrun() {
-        PathMatrix pathMatrix = new PathMatrix();
-
-        List<Integer> list1 = new ArrayList<Integer>();
-
-        list1.add(69);
-        list1.add(51);
-        list1.add(60);
-
-        pathMatrix.addColumn(list1);
-
-        PathFinder tester = new PathFinder(pathMatrix);
-
-        ShortestPath derivedPath = tester.navigate();
-
-        assertTrue(derivedPath.getCost() == 0);
-        assertTrue(derivedPath.size() == 0);
+        assertTrue(returnedValue[0] == 1);
+        assertTrue(returnedValue[1] == 0);
 
     }
 
-    @Test
-    public void testNoPath() {
-        PathMatrix pathMatrix = new PathMatrix();
+    //testing final result for shortest path in a given matrix
+   @Test
+    public void testFindShortestPathFxn(){
+       StringBuilder sampleMatrix1Result = new StringBuilder();
+       sampleMatrix1Result.append("Yes");
+       sampleMatrix1Result.append("\n");
+       sampleMatrix1Result.append("10");
+       sampleMatrix1Result.append("\n");
+       sampleMatrix1Result.append("[3,2,3,2]");
 
-        List<Integer> list1 = new ArrayList<Integer>();
+       StringBuilder sampleMatrix2Result = new StringBuilder();
+       sampleMatrix2Result.append("Yes");
+       sampleMatrix2Result.append("\n");
+       sampleMatrix2Result.append("5");
+       sampleMatrix2Result.append("\n");
+       sampleMatrix2Result.append("[4,3,2,1,0]");
 
-        list1.add(19);
-        list1.add(21);
-        list1.add(20);
+       //testing result for sample1
+       CalculatePaths calculatePaths1  = new CalculatePaths(sampleMatrix1);
+       String returnedResult1 = calculatePaths1.findShortestPath();
+       assertTrue(returnedResult1.equals(sampleMatrix1Result.toString()));
 
-        List<Integer> list2 = new ArrayList<Integer>();
-
-        list2.add(10);
-        list2.add(23);
-        list2.add(12);
-
-        List<Integer> list3 = new ArrayList<Integer>();
-
-        list3.add(19);
-        list3.add(20);
-        list3.add(20);
-
-        List<Integer> list4 = new ArrayList<Integer>();
-
-        list4.add(10);
-        list4.add(19);
-        list4.add(11);
-
-        pathMatrix.addColumn(list1);
-        pathMatrix.addColumn(list2);
-        pathMatrix.addColumn(list3);
-        pathMatrix.addColumn(list4);
-
-        PathFinder tester = new PathFinder(pathMatrix);
-
-        ShortestPath derivedPath = tester.navigate();
-
-        System.out.println("length of derived path is " + derivedPath.getCost());
-
-        assertTrue(derivedPath.getCost() == 48);
-        assertTrue(derivedPath.size() == 3);
-    }
-
-    @Test
-    public void testNegativePath() {
-        PathMatrix pathMatrix = new PathMatrix();
-
-        List<Integer> list1 = new ArrayList<Integer>();
-
-        list1.add(6);
-        list1.add(-5);
-        list1.add(3);
-        list1.add(9);
+       //testing result for sample2
+       CalculatePaths calculatePaths2  = new CalculatePaths(sampleMatrix2);
+       String returnedResult2 = calculatePaths2.findShortestPath();
+       assertTrue(returnedResult2.equals(sampleMatrix2Result.toString()));
 
 
-        List<Integer> list2 = new ArrayList<Integer>();
+   }
 
-        list2.add(3);
-        list2.add(2);
-        list2.add(-2);
-        list2.add(-1);
-
-
-        List<Integer> list3 = new ArrayList<Integer>();
-
-        list3.add(-5);
-        list3.add(4);
-        list3.add(6);
-        list3.add(-2);
-
-        List<Integer> list4 = new ArrayList<Integer>();
-
-        list4.add(9);
-        list4.add(10);
-        list4.add(10);
-        list4.add(10);
-
-
-        pathMatrix.addColumn(list1);
-        pathMatrix.addColumn(list2);
-        pathMatrix.addColumn(list3);
-        pathMatrix.addColumn(list4);
-
-        PathFinder tester = new PathFinder(pathMatrix);
-
-        ShortestPath derivedPath = tester.navigate();
-
-        System.out.println("length of derived path is " + derivedPath.getCost());
-
-        assertTrue(derivedPath.getCost() == 0);
-        assertTrue(derivedPath.size() == 4);
-        assertTrue(derivedPath.get(0).getRow() == 2);
-        assertTrue(derivedPath.get(1).getRow() == 3);
-        assertTrue(derivedPath.get(2).getRow() == 4);
-        assertTrue(derivedPath.get(3).getRow() == 1);
-
-
-    }
 }
