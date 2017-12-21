@@ -4,9 +4,6 @@ import android.support.test.rule.ActivityTestRule;
 
 import org.junit.Rule;
 import org.junit.Test;
-/**
- * Created by singh on 24-Mar-17.
- */
 
 public class GridActivityTest {
 

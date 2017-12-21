@@ -1,8 +1,9 @@
 package com.example.singh.photonchallenge;
 
 
-import com.example.singh.photonchallenge.solution.CalculatePaths;
+import com.example.singh.photonchallenge.utils.CalculatePaths;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
@@ -31,12 +32,22 @@ public class LogicUnitTest {
             {1, 1, 1, 1, 4}
     };
 
+
+    CalculatePaths calculatePaths1;
+    CalculatePaths calculatePaths2;
+    @Before
+    public void setup() {
+        calculatePaths1 = new CalculatePaths(sampleMatrix1);
+        calculatePaths2 = new CalculatePaths(sampleMatrix2);
+
+    }
+
     //testing minimum value in a column for a given sample matrix with range rowIndex-1 to rowIndex-1
     @Test
     public void testMinValueFnx() {
-        CalculatePaths calculatePaths = new CalculatePaths(sampleMatrix1);
-        int[] sampleColumn = calculatePaths.getColumnAt(2);
-        int[] returnedValue = calculatePaths.getMinValue(sampleColumn, 2);
+
+        int[] sampleColumn = calculatePaths1.getColumnAt(2);
+        int[] returnedValue = calculatePaths1.getMinValue(sampleColumn, 2);
         assertTrue(returnedValue[0] == 2);
         assertTrue(returnedValue[1] == 3);
 
@@ -46,8 +57,8 @@ public class LogicUnitTest {
     @Test
     public void testGetColumnAtFxn() {
 
-        CalculatePaths calculatePaths = new CalculatePaths(sampleMatrix1);
-        int[] returnedColumn = calculatePaths.getColumnAt(1);
+
+        int[] returnedColumn = calculatePaths1.getColumnAt(1);
         for (int i = 0; i < sampleMatrix1[0].length; i++) {
             assertTrue(returnedColumn[i] == sampleMatrix1[i][1]);
         }
@@ -57,9 +68,9 @@ public class LogicUnitTest {
     //testing minimumn value in a array
     @Test
     public void testGetShortestPathFxn() {
-        CalculatePaths calculatePaths = new CalculatePaths(sampleMatrix2);
-        int[] pathDistances = calculatePaths.getColumnAt(4);
-        int[] returnedValue = calculatePaths.getShortestPath(pathDistances);
+
+        int[] pathDistances = calculatePaths2.getColumnAt(4);
+        int[] returnedValue = calculatePaths2.getShortestPath(pathDistances);
 
         assertTrue(returnedValue[0] == 1);
         assertTrue(returnedValue[1] == 0);
@@ -84,12 +95,10 @@ public class LogicUnitTest {
        sampleMatrix2Result.append("[4,3,2,1,0]");
 
        //testing result for sample1
-       CalculatePaths calculatePaths1  = new CalculatePaths(sampleMatrix1);
        String returnedResult1 = calculatePaths1.findShortestPath();
        assertTrue(returnedResult1.equals(sampleMatrix1Result.toString()));
 
        //testing result for sample2
-       CalculatePaths calculatePaths2  = new CalculatePaths(sampleMatrix2);
        String returnedResult2 = calculatePaths2.findShortestPath();
        assertTrue(returnedResult2.equals(sampleMatrix2Result.toString()));
 

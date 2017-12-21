@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.singh.photonchallenge.solution.CalculatePaths;
+import com.example.singh.photonchallenge.utils.CalculatePaths;
 
 import java.util.ArrayList;
 import java.util.List;

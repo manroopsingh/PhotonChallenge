@@ -1,19 +1,16 @@
-package com.example.singh.photonchallenge.solution;
+package com.example.singh.photonchallenge.utils;
 
-/**
- * Created by singh on 27-Mar-17.
- */
 
 public class CalculatePaths {
 
 
-    int matrixHeight;
-    int matrixWidth;
-    int[][] matrix;
-    String isValid;
-    String pathString, distanceString;
-    String[] paths;
-    int[] distances;
+    private int matrixHeight;
+    private int matrixWidth;
+    private int[][] matrix;
+    private String isValid;
+    private String pathString, distanceString;
+    private String[] paths;
+    private int[] distances;
 
     public CalculatePaths(int[][] matrix) {
         this.matrix = matrix;
